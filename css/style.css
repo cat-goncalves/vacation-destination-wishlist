@@ -1,0 +1,18 @@
+#cardHeading {
+  text-align: center;
+}
+
+#cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.row{
+  display: flex;
+}
+
+.card {
+  width: 30%;
+  display: flex;
+}
