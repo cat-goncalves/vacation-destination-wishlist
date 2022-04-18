@@ -1,4 +1,8 @@
-export function createCard(destination, location, url, description) {
+export async function createCard(destination, location, url, description) {
+  if (url === "") {
+     url = await getPhoto(destination)
+  }
+
     //create card container + append
     let card = document.createElement("div")
     card.classList.add("card")
@@ -54,7 +58,8 @@ export function createCard(destination, location, url, description) {
     buttonContainer.appendChild(deleteButton)   
 }
 
-function editCard(event) {
+async function editCard(event) {
+  
   let card = event.target.parentElement.parentElement.parentElement
   let cardImg = card.childNodes[0]
   let cardBody = event.target.parentElement.parentElement
@@ -69,13 +74,34 @@ function editCard(event) {
   cardSubtitle.innerHTML = newLocation
   
   let newUrl = window.prompt("Enter new photo url")
+  if (newUrl === "") {
+    newUrl = await getPhoto(destination)
+ }
   cardImg.src = newUrl
 
   let newDescription = window.prompt("Enter new description")
   cardText.innerHTML = newDescription
+
 }
 
 function deleteCard(event) {
   let card = event.target.parentElement.parentElement.parentElement
   card.remove()
+}
+
+async function getPhoto(destination) {
+  const api_key = null
+  let api_url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${destination}&fit=crop&w=210&h=140&client_id=${api_key}`
+  let result
+
+  await fetch(api_url)
+    .then(res => res.json())
+    .then(data => {
+      result = data.urls.small
+  })
+  .catch(err => {
+    document.querySelector('h2').innerText = "We're having trouble finding that word. Try again"
+    console.log(`error${err}`)
+  })
+  return result
 }
