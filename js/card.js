@@ -31,7 +31,14 @@ export async function createCard(destination, location, url, description) {
     cardSubtitle.setAttribute("class","card-subtitle mb-2 text-muted")
     cardSubtitle.innerHTML = location
     cardBody.appendChild(cardSubtitle)
-  
+
+    // create timestamp
+    let timestamp = document.createElement("small")
+    timestamp.setAttribute("class","card-subtitle mb-2 text-muted")
+    timestamp.innerHTML = `created on: ${moment().format('MMMM Do YYYY, h:mm:ss a')}`
+    cardBody.appendChild(timestamp)
+    
+
     // create p tag
     let cardText = document.createElement("p")
     cardText.classList.add("card-text")
@@ -65,7 +72,10 @@ async function editCard(event) {
   let cardBody = event.target.parentElement.parentElement
   let cardTitle = cardBody.childNodes[0]
   let cardSubtitle = cardBody.childNodes[1]
-  let cardText = cardBody.childNodes[2]
+  let timestamp = cardBody.childNodes[2]
+  let cardText = cardBody.childNodes[3]
+
+  console.log(cardBody.childNodes)
 
   let newDestination = window.prompt("Enter new destination")
   cardTitle.innerHTML = newDestination
@@ -73,15 +83,12 @@ async function editCard(event) {
   let newLocation = window.prompt("Enter new location")
   cardSubtitle.innerHTML = newLocation
   
-  let newUrl = window.prompt("Enter new photo url")
-  if (newUrl === "") {
-    newUrl = await getPhoto(destination)
- }
-  cardImg.src = newUrl
+  cardImg.src = await getPhoto(newDestination)
 
   let newDescription = window.prompt("Enter new description")
   cardText.innerHTML = newDescription
 
+  timestamp.innerHTML = `edited on: ${moment().format('MMMM Do YYYY, h:mm:ss a')}`
 }
 
 function deleteCard(event) {
